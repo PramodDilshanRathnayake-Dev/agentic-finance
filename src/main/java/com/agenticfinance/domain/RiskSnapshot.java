@@ -7,9 +7,6 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 
-/**
- * Risk metrics per FRS §3: VaR 90%, CVaR 99%.
- */
 @Entity
 @Table(name = "risk_snapshot")
 @Getter

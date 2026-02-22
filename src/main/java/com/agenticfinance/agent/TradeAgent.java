@@ -20,9 +20,6 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Map;
 
-/**
- * Trade agent: place orders within capital constraints. FRS §4.4. Latency target: LATENCY_TRADE_MS.
- */
 @Service
 @RequiredArgsConstructor
 @Slf4j

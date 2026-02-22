@@ -13,9 +13,6 @@ import java.math.RoundingMode;
 import java.time.Instant;
 import java.util.Optional;
 
-/**
- * Portfolio lifecycle and capital preservation (FRS §7.1).
- */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -57,14 +54,12 @@ public class PortfolioService {
         portfolioRepository.save(p);
     }
 
-    /** Withdrawal cap in absolute amount: withdrawalCapPct% of (totalCapital - preservedBase). */
     public BigDecimal withdrawalCapAmount(Portfolio p) {
         BigDecimal investable = p.getTotalCapital().subtract(p.getPreservedBase()).max(BigDecimal.ZERO);
         return investable.multiply(BigDecimal.valueOf(frsConstants.getWithdrawalCapPct()))
                 .divide(BigDecimal.valueOf(100), 4, RoundingMode.HALF_UP);
     }
 
-    /** Check: after withdrawal, totalCapital >= preservedBase. */
     public boolean canWithdraw(Portfolio p, BigDecimal amount) {
         if (amount.compareTo(BigDecimal.ZERO) <= 0) return false;
         BigDecimal after = p.getTotalCapital().subtract(amount);

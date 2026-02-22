@@ -1,0 +1,42 @@
+# Agentic Finance v1 - Local Market only
+# FRS v1.0.1 / Architecture v1.0.0
+
+spring:
+  application:
+    name: agentic-finance
+  datasource:
+    url: jdbc:h2:mem:agenticfinance;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+    database-platform: org.hibernate.dialect.H2Dialect
+
+# FRS §3 numeric targets
+app:
+  frs:
+    var-confidence: 90
+    cvar-confidence: 99
+    latency-trade-ms: 1000
+    withdrawal-cap-pct: 10
+    coverage-min: 80
+    cost-roi-max-ratio: 5
+
+# Spring AI can be added later for LLM-backed agent responses
+
+server:
+  port: 8080
+
+logging:
+  level:
+    com.agenticfinance: INFO
+    org.springframework.ai: INFO

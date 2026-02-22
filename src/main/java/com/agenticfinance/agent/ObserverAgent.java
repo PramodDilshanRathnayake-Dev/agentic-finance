@@ -1,6 +1,7 @@
 package com.agenticfinance.agent;
 
 import com.agenticfinance.domain.AuditLog;
+import com.agenticfinance.event.AppEvent;
 import com.agenticfinance.event.EventPublisher;
 import com.agenticfinance.event.EventTypes;
 import com.agenticfinance.repository.AuditLogRepository;
@@ -11,11 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.Map;
 
-/**
- * Observer agent: log reasoning, hallucination alerts. FRS §4.5.
- */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -35,11 +32,6 @@ public class ObserverAgent {
                 .timestamp(Instant.now())
                 .build();
         auditLogRepository.save(logEntry);
-        eventPublisher.publish(EventTypes.AGENT_REASONING, SOURCE, Map.of(
-                "agentId", agentId,
-                "trace", trace != null ? trace : "",
-                "promptRef", promptRef != null ? promptRef : ""
-        ));
     }
 
     @Transactional
@@ -51,15 +43,10 @@ public class ObserverAgent {
                 .timestamp(Instant.now())
                 .build();
         auditLogRepository.save(logEntry);
-        eventPublisher.publish(EventTypes.HALLUCINATION_ALERT, SOURCE, Map.of(
-                "agentId", agentId,
-                "alertType", alertType != null ? alertType : "",
-                "suggestion", suggestion != null ? suggestion : ""
-        ));
     }
 
     @EventListener
-    public void onAppEvent(com.agenticfinance.event.AppEvent event) {
+    public void onAppEvent(AppEvent event) {
         String type = event.getEnvelope().getEventType();
         if (EventTypes.ORDER_PLACED.equals(type) || EventTypes.WITHDRAWAL_REQUESTED.equals(type)) {
             AuditLog logEntry = AuditLog.builder()

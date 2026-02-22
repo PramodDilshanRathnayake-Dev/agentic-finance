@@ -6,9 +6,6 @@ import lombok.*;
 import java.time.Instant;
 import java.util.Map;
 
-/**
- * Event envelope per EVENTS-AND-MCP-v1.0.0.
- */
 @Getter
 @Setter
 @NoArgsConstructor

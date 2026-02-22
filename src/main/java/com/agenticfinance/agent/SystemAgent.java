@@ -19,13 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
 
-/**
- * System agent: capital preservation, withdrawal enforcement, Banking gateway.
- * FRS §4.2.
- */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -52,7 +46,6 @@ public class SystemAgent {
                 .build();
     }
 
-    /** Emit capital constraint update for Trade agent. */
     public void emitCapitalConstraint(String portfolioId) {
         CapitalState state = getCapitalState(portfolioId);
         eventPublisher.publish(EventTypes.CAPITAL_CONSTRAINT_UPDATE, SOURCE, Map.of(
@@ -62,7 +55,6 @@ public class SystemAgent {
         ));
     }
 
-    /** Enforce withdrawal cap; return allowed amount. */
     public AllowedWithdrawal enforceWithdrawalCap(String portfolioId, BigDecimal requestedAmount) {
         Portfolio p = portfolioRepository.findById(portfolioId).orElseThrow();
         BigDecimal cap = portfolioService.withdrawalCapAmount(p);
@@ -107,19 +99,13 @@ public class SystemAgent {
         return result;
     }
 
-    public record CapitalState(BigDecimal preservedBase, BigDecimal totalCapital, BigDecimal availableToInvest, BigDecimal withdrawalCap) {
-        public static CapitalStateBuilder builder() { return new CapitalStateBuilder(); }
-        public static class CapitalStateBuilder {
-            private BigDecimal preservedBase;
-            private BigDecimal totalCapital;
-            private BigDecimal availableToInvest;
-            private BigDecimal withdrawalCap;
-            public CapitalStateBuilder preservedBase(BigDecimal v) { this.preservedBase = v; return this; }
-            public CapitalStateBuilder totalCapital(BigDecimal v) { this.totalCapital = v; return this; }
-            public CapitalStateBuilder availableToInvest(BigDecimal v) { this.availableToInvest = v; return this; }
-            public CapitalStateBuilder withdrawalCap(BigDecimal v) { this.withdrawalCap = v; return this; }
-            public CapitalState build() { return new CapitalState(preservedBase, totalCapital, availableToInvest, withdrawalCap); }
-        }
+    @lombok.Getter
+    @lombok.Builder
+    public static class CapitalState {
+        private final BigDecimal preservedBase;
+        private final BigDecimal totalCapital;
+        private final BigDecimal availableToInvest;
+        private final BigDecimal withdrawalCap;
     }
 
     public record AllowedWithdrawal(BigDecimal allowedAmount, String reason) {}

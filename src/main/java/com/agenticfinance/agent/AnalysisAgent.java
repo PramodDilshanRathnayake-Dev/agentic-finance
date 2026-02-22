@@ -16,12 +16,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-/**
- * Analysis agent: market data, VaR 90%, CVaR 99%, strategy signals.
- * FRS §4.3. No direct trading.
- */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -38,9 +33,6 @@ public class AnalysisAgent {
         return localMarketGateway.getQuotes(symbols);
     }
 
-    /**
-     * Compute stub risk metrics (VaR 90%, CVaR 99%). Production would use historical/parametric model.
-     */
     @Transactional
     public RiskMetrics computeAndPublishRiskMetrics(String portfolioId, List<String> symbols) {
         List<MarketQuote> quotes = localMarketGateway.getQuotes(symbols);
@@ -69,7 +61,6 @@ public class AnalysisAgent {
         return new RiskMetrics(var90, cvar99, volatility, syms);
     }
 
-    /** Emit strategy signal (BUY/SELL/HOLD) to Trade agent. */
     public void publishStrategySignal(String action, String symbol, double confidence, String rationale) {
         eventPublisher.publish(EventTypes.STRATEGY_SIGNAL, SOURCE, Map.of(
                 "action", action,

@@ -5,9 +5,6 @@ import lombok.*;
 
 import java.time.Instant;
 
-/**
- * Observer agent audit log: reasoning traces, hallucination alerts.
- */
 @Entity
 @Table(name = "audit_log")
 @Getter

@@ -14,9 +14,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * Stub implementation for dev/demo. Replace with real HTTP client for production.
- */
 @Component
 @Primary
 @RequiredArgsConstructor
@@ -47,8 +44,7 @@ public class StubBankingGateway implements BankingGateway {
     @Override
     public WithdrawalResult getWithdrawalStatus(String withdrawalId) {
         WithdrawalResult r = withdrawals.get(withdrawalId);
-        if (r != null)
-            return r;
+        if (r != null) return r;
         return WithdrawalResult.builder()
                 .withdrawalId(withdrawalId)
                 .status(Withdrawal.WithdrawalStatus.FAILED)
@@ -57,6 +53,6 @@ public class StubBankingGateway implements BankingGateway {
 
     @Override
     public BigDecimal getBalance(String accountId) {
-        return BigDecimal.valueOf(10000); // stub
+        return BigDecimal.valueOf(10000);
     }
 }

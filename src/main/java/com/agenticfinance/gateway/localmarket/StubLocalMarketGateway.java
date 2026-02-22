@@ -15,9 +15,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * Stub implementation for dev/demo. Replace with real HTTP client for production.
- */
 @Component
 @Primary
 @RequiredArgsConstructor

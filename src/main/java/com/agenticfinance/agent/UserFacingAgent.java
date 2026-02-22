@@ -1,8 +1,8 @@
 package com.agenticfinance.agent;
 
 import com.agenticfinance.domain.Portfolio;
-import com.agenticfinance.repository.PortfolioRepository;
 import com.agenticfinance.repository.OrderRepository;
+import com.agenticfinance.repository.PortfolioRepository;
 import com.agenticfinance.repository.WithdrawalRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,9 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * User-facing agent: aggregate verified status, filter hallucinations. FRS §4.1.
- */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -39,7 +36,7 @@ public class UserFacingAgent {
         });
 
         SystemAgent.CapitalState capital = systemAgent.getCapitalState(portfolioId);
-        portfolio.put("withdrawalCap", capital.withdrawalCap());
+        portfolio.put("withdrawalCap", capital.getWithdrawalCap());
 
         orderRepository.findByPortfolioIdOrderByCreatedAtDesc(portfolioId, org.springframework.data.domain.PageRequest.of(0, 1))
                 .stream().findFirst().ifPresent(o -> {
@@ -55,10 +52,5 @@ public class UserFacingAgent {
         return response;
     }
 
-    public record VerifiedStatus(
-            Map<String, Object> portfolio,
-            Map<String, Object> alerts,
-            Map<String, Object> lastTrade,
-            boolean verified
-    ) {}
+    public record VerifiedStatus(Map<String, Object> portfolio, Map<String, Object> alerts, Map<String, Object> lastTrade, boolean verified) {}
 }
