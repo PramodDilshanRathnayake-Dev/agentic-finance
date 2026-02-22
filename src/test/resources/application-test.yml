@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
+app:
+  frs:
+    var-confidence: 90
+    cvar-confidence: 99
+    latency-trade-ms: 1000
+    withdrawal-cap-pct: 10
