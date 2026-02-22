@@ -3,7 +3,7 @@
 **Version:** 1.0.0  
 **FRS reference:** [FRS v1.0.1](../frs/FRS-v1.0.1.md)  
 **Owner:** Architecture Agent  
-**Status:** Draft for User and PM approval  
+**Status:** Approved — Architecture Agent deliverables complete; **paused for User review**
 
 ---
 
@@ -54,6 +54,97 @@ flowchart TB
   TA --> Repo
   OA --> Repo
 ```
+
+---
+
+## 2.1 C4 Level 2 — Container diagram
+
+```mermaid
+flowchart TB
+  subgraph c4ext [External]
+    User[User]
+    LMAPI[Local Market APIs]
+    BAPI[Banking APIs]
+  end
+  subgraph c4app [Agentic Finance App - Spring]
+    UF[User-facing Agent]
+    SA[System Agent]
+    AA[Analysis Agent]
+    TA[Trade Agent]
+    OA[Observer Agent]
+    LMGW[LocalMarket Gateway]
+    BGW[Banking Gateway]
+  end
+  subgraph c4db [Data]
+    Repo[(Repositories)]
+  end
+  User <--> UF
+  LMGW <--> LMAPI
+  BGW <--> BAPI
+  UF <--> SA
+  AA <--> TA
+  TA <--> SA
+  OA --> UF
+  OA --> SA
+  OA --> AA
+  OA --> TA
+  SA --> BGW
+  AA --> LMGW
+  TA --> LMGW
+  SA --> Repo
+  AA --> Repo
+  TA --> Repo
+  OA --> Repo
+```
+
+**Containers:** Single Spring application; LocalMarket Gateway and Banking Gateway as internal adapters; Repositories as RDS-backed persistence.
+
+---
+
+## 2.2 C4 Level 3 — Component diagram (Application)
+
+```mermaid
+flowchart TB
+  subgraph agents [Agents]
+    UF[User-facing]
+    SA[System]
+    AA[Analysis]
+    TA[Trade]
+    OA[Observer]
+  end
+  subgraph gateways [Gateways]
+    LMGW[LocalMarket Gateway]
+    BGW[Banking Gateway]
+  end
+  subgraph infra [Infra]
+    EventBus[Event Bus]
+    RepoFacade[Repository Facade]
+  end
+  subgraph repos [Repositories]
+    Portfolio[(Portfolio)]
+    Orders[(Orders)]
+    Risk[(Risk)]
+    Audit[(Audit)]
+  end
+  UF <--> EventBus
+  SA <--> EventBus
+  AA <--> EventBus
+  TA <--> EventBus
+  OA --> EventBus
+  AA --> LMGW
+  TA --> LMGW
+  SA --> BGW
+  SA --> RepoFacade
+  AA --> RepoFacade
+  TA --> RepoFacade
+  OA --> RepoFacade
+  RepoFacade --> Portfolio
+  RepoFacade --> Orders
+  RepoFacade --> Risk
+  RepoFacade --> Audit
+```
+
+**Components:** Five agents; two gateway adapters; event bus for agent-to-agent; repository facade over four persistence stores (Portfolio, Orders, Risk, Audit).
 
 ---
 
@@ -154,12 +245,15 @@ flowchart TB
 
 ---
 
-## 9. Next steps (Architecture Agent)
+## 9. Architecture Agent deliverables (complete)
 
-- Detail C4 Level 2/3 diagrams (containers, components).
-- Define API contracts for LocalMarket and Banking gateways.
-- Specify event schema and MCP tool definitions.
-- Align with PM and User for approval.
+| Deliverable | Location | Status |
+|-------------|----------|--------|
+| C4 Level 2/3 diagrams | §2.1, §2.2 above | Done |
+| API contracts (LocalMarket, Banking) | [API-CONTRACTS-v1.0.0](API-CONTRACTS-v1.0.0.md) | Done |
+| Event schema and MCP tools | [EVENTS-AND-MCP-v1.0.0](EVENTS-AND-MCP-v1.0.0.md) | Done |
+
+**Process:** Paused for User review. Next phase (Development) will commence after User approval of these deliverables.
 
 ---
 

@@ -8,7 +8,7 @@ Single source of truth for process, requirements, and architecture.
 |--------|---------|
 | `process/` | Process definition, governance, approval gates |
 | `frs/` | Functional Requirements Specification (FRS) by version (current: v1.0.1) |
-| `architecture/` | System architecture, agent specs, deployment (current: v1.0.0) |
+| `architecture/` | System architecture, agent specs, deployment (current: v1.0.0); includes API contracts, events, MCP |
 
 ## Versioning
 
