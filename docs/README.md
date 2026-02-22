@@ -7,8 +7,8 @@ Single source of truth for process, requirements, and architecture.
 | Folder | Purpose |
 |--------|---------|
 | `process/` | Process definition, governance, approval gates |
-| `frs/` | Functional Requirements Specification (FRS) by version |
-| `architecture/` | System architecture, agent specs, deployment |
+| `frs/` | Functional Requirements Specification (FRS) by version (current: v1.0.1) |
+| `architecture/` | System architecture, agent specs, deployment (current: v1.0.0) |
 
 ## Versioning
 
