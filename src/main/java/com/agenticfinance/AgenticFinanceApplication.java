@@ -1,0 +1,12 @@
+package com.agenticfinance;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class AgenticFinanceApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(AgenticFinanceApplication.class, args);
+    }
+}
